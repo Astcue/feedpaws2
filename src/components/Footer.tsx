@@ -35,7 +35,7 @@ const Footer = () => {
               href="mailto:help.feedpawsinitiative@gmail.com"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              help.feedpawsinitiative@gmail.com
+              report.fpi@gmail.com
             </a>
           </div>
 
