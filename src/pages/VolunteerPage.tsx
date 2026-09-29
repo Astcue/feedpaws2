@@ -1,51 +1,45 @@
 import { motion } from "framer-motion";
 import { Heart, Users, Calendar, CheckCircle } from "lucide-react";
+import { gmailComposeUrl } from "@/lib/gmail";
 
 const benefits = [
   { icon: Heart, text: "Make a real difference in animals' lives" },
-  { icon: Users, text: "Join a community of compassionate individuals" },
+  { icon: Users, text: "Join a community of compassionate people" },
   { icon: Calendar, text: "Flexible scheduling based on your availability" },
   { icon: CheckCircle, text: "No prior experience required" },
 ];
 
 const VolunteerPage = () => {
   return (
-    <div className="min-h-screen pt-24">
-      {/* Header */}
-      <section className="py-16">
-        <div className="container px-4 mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block px-4 py-2 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary">
-              🤝 Join Our Team
-            </span>
-            <h1 className="mb-4 font-serif text-5xl text-foreground md:text-6xl">
-              Become a Volunteer
+    <div>
+      <section className="pt-32 pb-10 md:pt-40 md:pb-12">
+        <div className="container-page">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl">
+            <span className="eyebrow">Join our team</span>
+            <h1 className="mt-4 mb-4 font-serif text-4xl text-foreground md:text-5xl">
+              Become a volunteer
             </h1>
-            <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
-              Lend your hands and heart to help stray animals in our community
+            <p className="text-lg text-muted-foreground">
+              Lend your hands and heart to help stray animals in our community.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Benefits */}
-      <section className="py-8">
-        <div className="container px-4 mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-4 max-w-3xl mx-auto">
+      <section className="pb-10">
+        <div className="container-page">
+          <div className="flex flex-wrap gap-3">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={benefit.text}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-card shadow-soft"
+                transition={{ delay: index * 0.06 }}
+                className="flex items-center gap-2 px-4 py-2 border rounded-full bg-card border-border"
               >
-                <benefit.icon className="w-4 h-4 text-primary" />
+                <benefit.icon className="w-4 h-4 text-primary shrink-0" />
                 <span className="text-sm text-muted-foreground">{benefit.text}</span>
               </motion.div>
             ))}
@@ -53,19 +47,19 @@ const VolunteerPage = () => {
         </div>
       </section>
 
-      {/* Form Embed */}
-      <section className="py-12">
-        <div className="container px-4 mx-auto">
+      {/* Registration Form */}
+      <section className="pb-16 md:pb-20">
+        <div className="container-page">
           <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto overflow-hidden rounded-3xl bg-card shadow-medium"
+            className="max-w-4xl mx-auto overflow-hidden border rounded-2xl bg-card border-border shadow-medium"
           >
-            <div className="p-6 text-center bg-gradient-to-r from-primary/5 to-accent/5 border-b border-border">
-              <h2 className="font-serif text-2xl text-foreground">Volunteer Registration Form</h2>
-              <p className="text-sm text-muted-foreground mt-2">
-                Fill out the form below to join our volunteer team
+            <div className="p-6 text-center border-b border-border bg-muted/40">
+              <h2 className="font-serif text-2xl text-foreground">Volunteer registration form</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Fill out the form below to join our volunteer team.
               </p>
             </div>
 
@@ -82,26 +76,26 @@ const VolunteerPage = () => {
       </section>
 
       {/* Additional Info */}
-      <section className="py-20 bg-muted/50">
-        <div className="container px-4 mx-auto">
+      <section className="py-20 border-t border-border bg-muted/40 md:py-24">
+        <div className="container-page">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="max-w-2xl mx-auto text-center"
           >
-            <h2 className="mb-4 font-serif text-3xl text-foreground">
-              Have Questions?
-            </h2>
-            <p className="mb-6 text-muted-foreground">
-              If you have any questions about volunteering or need more information,
-              feel free to reach out to us directly.
+            <h2 className="mb-4 font-serif text-2xl text-foreground md:text-3xl">Have questions?</h2>
+            <p className="mb-7 text-muted-foreground">
+              If you have any questions about volunteering or need more information, feel free
+              to reach out to us directly.
             </p>
             <a
-              href="mailto:help.feedpawsinitiative@gmail.com"
-              className="inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full gradient-hero text-primary-foreground shadow-glow"
+              href={gmailComposeUrl("help.feedpawsinitiative@gmail.com")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-7 py-3.5 font-medium rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Contact Us
+              Contact us
             </a>
           </motion.div>
         </div>

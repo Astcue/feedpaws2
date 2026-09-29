@@ -4,132 +4,56 @@ import { Quote } from "lucide-react";
 import VolunteerOfYear, { Winner } from "../components/VolunteerOfYear";
 
 const DirectorsMessagePage = () => {
-  // Sumedha's story as requested (no achievements) — year set to 2025
-  const winner: Winner = {
-    name: "Sumedha Deb",
-    photo: "/images/volunteer-of-year/sumedha-dev.jpg", // add this file to public/images/volunteer-of-year/
-    year: 2025,
-    bio:
-      "I had always dreamed of starting my own NGO... It was always something I wanted to do for manyyy yearss.. But the moment our director sir (Mr. Sayan Ghosh) told me he was creating something similar, I joined him without any second thought. I didn't come here to dominate or seek control, I came here to work, to contribute and to make a difference.",
-    achievements: [], // explicitly empty
-  };
+
+  const paragraphs = [
+    `Feed Paws Initiative started with a very simple thought, if we see an animal suffering, we shouldn't just walk past it.`,
+    `We started small, with whatever we had and with a few people who were willing to help. Since then, we've fed dogs, responded to cases, helped animals get treatment and, most importantly, learned a lot along the way.`,
+    `What makes me proudest about Feed Paws Initiative is the people behind it. Most of our work is done by young volunteers who give their time without expecting anything in return. They go out in the field, deal with difficult situations and keep showing up.
+There is a lot more that we want to do. But for now, our focus is simple, help where we can, learn from what we do, and keep moving forward.`,
+    `Thank you to everyone who has trusted us, supported us, volunteered with us, or simply helped an animal because they saw it needed help.`,
+
+];
 
   return (
-    <div className="min-h-screen pt-24 flex items-center">
-      <div className="container px-4 mx-auto py-20">
+    <div className="pt-32 pb-20 md:pt-40 md:pb-28">
+      <div className="container-page">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           className="max-w-3xl mx-auto"
         >
-          {/* Header */}
-          <div className="text-center mb-12">
-            <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-block px-4 py-2 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
-            >
-              ✉️ A Personal Note
-            </motion.span>
-            <h1 className="font-serif text-5xl text-foreground md:text-6xl">
-              Director's Message
+          <div className="mb-10 text-center">
+            <span className="eyebrow">A personal note</span>
+            <h1 className="mt-4 font-serif text-4xl text-foreground md:text-5xl">
+              Director's message
             </h1>
           </div>
 
-          {/* Message Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="relative p-10 md:p-16 rounded-3xl bg-card shadow-medium"
-          >
-            {/* Quote decoration */}
-            <Quote className="absolute top-8 left-8 w-12 h-12 text-primary/10" />
-            <Quote className="absolute bottom-8 right-8 w-12 h-12 text-primary/10 rotate-180" />
+          <div className="relative p-8 border rounded-2xl bg-card border-border shadow-medium md:p-14">
+            <Quote className="absolute w-10 h-10 top-6 left-6 text-primary/10" aria-hidden="true" />
 
             <div className="relative z-10">
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mb-6 text-lg leading-relaxed text-muted-foreground md:text-xl"
-              >
-                Dear Friends and Supporters,
-              </motion.p>
+              <p className="mb-5 text-lg leading-relaxed text-muted-foreground">
+                Dear friends and supporters,
+              </p>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="mb-6 text-lg leading-relaxed text-muted-foreground md:text-xl"
-              >
-                What started as a simple act of kindness—feeding a few stray dogs in our
-                neighborhood—has grown into something truly meaningful. Feed Paws was born
-                out of a deep belief that every living being deserves compassion, care,
-                and a chance at a better life.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-                className="mb-6 text-lg leading-relaxed text-muted-foreground md:text-xl"
-              >
-                Every day, when I see our volunteers stepping out with bowls of food and
-                hearts full of love, I'm reminded of why we do this. The wagging tails,
-                the grateful eyes—these moments make all the effort worthwhile. We're
-                not just feeding animals; we're building a community that cares.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="mb-8 text-lg leading-relaxed text-muted-foreground md:text-xl"
-              >
-                To everyone who has supported us, volunteered with us, or simply shared
-                our story—thank you. Together, we're making a difference, one meal at a
-                time, one life at a time. This is just the beginning, and I invite you
-                to be part of this beautiful journey.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.9 }}
-                className="pt-6 border-t border-border"
-              >
-                <p className="font-serif text-xl text-foreground mb-1">
-                  With warmth and gratitude,
+              {paragraphs.map((p, i) => (
+                <p key={i} className="mb-5 leading-relaxed text-muted-foreground">
+                  {p}
                 </p>
-                <p className="text-foreground font-serif text-2xl font-medium">
-                  Sayan Ghosh
-                </p>
-              </motion.div>
+              ))}
+
+              <div className="pt-6 mt-2 border-t border-border">
+                <p className="mb-1 text-foreground">With warmth and gratitude,</p>
+                <p className="text-xl font-medium text-foreground font-serif">Shri Sayan Ghosh</p>
+                <p className="text-sm text-muted-foreground">Hon'ble Director,
+Feed Paws Initiative</p>
+              </div>
             </div>
-          </motion.div>
-
-          {/* Volunteer of the Year (ADDED) */}
-          <div className="mt-10">
-            {/* showYear set to true to display "— 2025" */}
-            <VolunteerOfYear winner={winner} others={[]} showYear={true} />
           </div>
 
-          {/* Decorative paw prints */}
-          <div className="flex justify-center mt-12 gap-4">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 0.2, scale: 1 }}
-                transition={{ delay: 1 + i * 0.1 }}
-                className="text-3xl"
-              >
-                🐾
-              </motion.div>
-            ))}
+          <div className="mt-10">
           </div>
         </motion.div>
       </div>
