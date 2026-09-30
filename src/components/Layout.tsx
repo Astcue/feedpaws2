@@ -13,20 +13,19 @@ const Layout = () => {
 
   useEffect(() => {
     let connectionCheck: AbortController | undefined;
-    let retryTimer: number | undefined;
     let isDisposed = false;
+    let isChecking = false;
+    let connectionIsOnline = navigator.onLine;
 
-    const scheduleRetry = () => {
-      if (isDisposed || retryTimer !== undefined) return;
-
-      retryTimer = window.setTimeout(() => {
-        retryTimer = undefined;
-        void checkConnection();
-      }, 3000);
+    const updateConnection = (online: boolean) => {
+      connectionIsOnline = online;
+      setIsOnline(online);
     };
 
     const checkConnection = async () => {
-      connectionCheck?.abort();
+      if (isDisposed || isChecking) return;
+
+      isChecking = true;
       const controller = new AbortController();
       connectionCheck = controller;
       const timeout = window.setTimeout(() => controller.abort(), 2500);
@@ -38,40 +37,33 @@ const Layout = () => {
         });
         if (isDisposed || controller.signal.aborted) return;
 
-        setIsOnline(response.ok);
-        if (!response.ok) scheduleRetry();
+        updateConnection(response.ok);
       } catch {
-        if (!isDisposed && !controller.signal.aborted) {
-          setIsOnline(false);
-          scheduleRetry();
-        }
+        if (!isDisposed) updateConnection(false);
       } finally {
         window.clearTimeout(timeout);
         if (connectionCheck === controller) connectionCheck = undefined;
+        isChecking = false;
       }
     };
 
-    const handleOnline = () => {
-      if (retryTimer !== undefined) {
-        window.clearTimeout(retryTimer);
-        retryTimer = undefined;
-      }
-      void checkConnection();
-    };
+    const handleOnline = () => void checkConnection();
     const handleOffline = () => {
       connectionCheck?.abort();
-      setIsOnline(false);
-      scheduleRetry();
+      updateConnection(false);
     };
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
     void checkConnection();
+    const retryInterval = window.setInterval(() => {
+      if (!connectionIsOnline) void checkConnection();
+    }, 3000);
 
     return () => {
       isDisposed = true;
       connectionCheck?.abort();
-      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
+      window.clearInterval(retryInterval);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
