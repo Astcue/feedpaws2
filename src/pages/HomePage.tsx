@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight, UtensilsCrossed, Stethoscope, Megaphone } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, MapPin, UtensilsCrossed, Stethoscope, Megaphone } from "lucide-react";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import galleryImages from "@/data/galleryImages";
 
@@ -153,6 +153,34 @@ const HomePage = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Location */}
+      <section className="py-20 md:py-28">
+        <div className="container-page">
+          <motion.div {...fadeUp} className="max-w-xl mb-10">
+            <span className="eyebrow">Our location</span>
+            <h2 className="mt-4 font-serif text-3xl text-foreground md:text-4xl">
+              Find us in Raiganj
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              <MapPin className="inline w-4 h-4 mr-1.5 align-text-bottom" aria-hidden="true" />
+              Raiganj, West Bengal 733134
+            </p>
+          </motion.div>
+          <motion.div
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.1 }}
+            className="overflow-hidden rounded-2xl border border-border shadow-card"
+          >
+            <iframe
+              title="Map showing Raiganj, West Bengal 733134"
+              src="https://maps.google.com/maps?q=Raiganj%2C%20West%20Bengal%20733134&z=14&output=embed"
+              className="block w-full h-[280px] border-0 md:h-[400px]"
+              loading="lazy"
+            />
+          </motion.div>
         </div>
       </section>
 
