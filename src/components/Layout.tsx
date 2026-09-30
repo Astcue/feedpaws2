@@ -9,65 +9,6 @@ const Layout = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [isOnline, setIsOnline] = useState(() => navigator.onLine);
-
-  useEffect(() => {
-    let connectionCheck: AbortController | undefined;
-    let isDisposed = false;
-    let isChecking = false;
-    let connectionIsOnline = navigator.onLine;
-
-    const updateConnection = (online: boolean) => {
-      connectionIsOnline = online;
-      setIsOnline(online);
-    };
-
-    const checkConnection = async () => {
-      if (isDisposed || isChecking) return;
-
-      isChecking = true;
-      const controller = new AbortController();
-      connectionCheck = controller;
-      const timeout = window.setTimeout(() => controller.abort(), 2500);
-
-      try {
-        const response = await fetch(`/robots.txt?connection-check=${Date.now()}`, {
-          cache: "no-store",
-          signal: controller.signal,
-        });
-        if (isDisposed || controller.signal.aborted) return;
-
-        updateConnection(response.ok);
-      } catch {
-        if (!isDisposed) updateConnection(false);
-      } finally {
-        window.clearTimeout(timeout);
-        if (connectionCheck === controller) connectionCheck = undefined;
-        isChecking = false;
-      }
-    };
-
-    const handleOnline = () => void checkConnection();
-    const handleOffline = () => {
-      connectionCheck?.abort();
-      updateConnection(false);
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-    void checkConnection();
-    const retryInterval = window.setInterval(() => {
-      if (!connectionIsOnline) void checkConnection();
-    }, 3000);
-
-    return () => {
-      isDisposed = true;
-      connectionCheck?.abort();
-      window.clearInterval(retryInterval);
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
 
   useEffect(() => {
     const images = Array.from(document.images).filter((image) => image.loading !== "lazy");
@@ -169,34 +110,6 @@ const Layout = () => {
           <Footer />
         </motion.div>
 
-      <AnimatePresence>
-        {!isOnline && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-background/90 px-6 text-center backdrop-blur-2xl"
-            role="alert"
-            aria-labelledby="offline-title"
-          >
-            <div className="max-w-md">
-              <img
-                src="/favicon.png"
-                alt="Feed Paws logo"
-                className="w-20 h-20 mx-auto mb-6 rounded-full border border-border shadow-medium"
-              />
-              <span className="eyebrow">Feed Paws needs a signal</span>
-              <h1 id="offline-title" className="mt-4 font-serif text-3xl text-foreground md:text-4xl">
-                Looks like you’re offline
-              </h1>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                Connect to the internet and we’ll be right here with more paws, care, and updates.
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 };
