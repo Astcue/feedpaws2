@@ -13,6 +13,17 @@ const Layout = () => {
 
   useEffect(() => {
     let connectionCheck: AbortController | undefined;
+    let retryTimer: number | undefined;
+    let isDisposed = false;
+
+    const scheduleRetry = () => {
+      if (isDisposed || retryTimer !== undefined) return;
+
+      retryTimer = window.setTimeout(() => {
+        retryTimer = undefined;
+        void checkConnection();
+      }, 3000);
+    };
 
     const checkConnection = async () => {
       connectionCheck?.abort();
@@ -25,19 +36,32 @@ const Layout = () => {
           cache: "no-store",
           signal: controller.signal,
         });
+        if (isDisposed || controller.signal.aborted) return;
+
         setIsOnline(response.ok);
+        if (!response.ok) scheduleRetry();
       } catch {
-        setIsOnline(false);
+        if (!isDisposed && !controller.signal.aborted) {
+          setIsOnline(false);
+          scheduleRetry();
+        }
       } finally {
         window.clearTimeout(timeout);
         if (connectionCheck === controller) connectionCheck = undefined;
       }
     };
 
-    const handleOnline = () => void checkConnection();
+    const handleOnline = () => {
+      if (retryTimer !== undefined) {
+        window.clearTimeout(retryTimer);
+        retryTimer = undefined;
+      }
+      void checkConnection();
+    };
     const handleOffline = () => {
       connectionCheck?.abort();
       setIsOnline(false);
+      scheduleRetry();
     };
 
     window.addEventListener("online", handleOnline);
@@ -45,7 +69,9 @@ const Layout = () => {
     void checkConnection();
 
     return () => {
+      isDisposed = true;
       connectionCheck?.abort();
+      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
